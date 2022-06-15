@@ -1,0 +1,13 @@
+.package_form{
+    display: flex;
+    flex-direction: column;
+    height: 70vh;
+    justify-content: space-between;
+}
+.title{
+    margin: 15px auto;
+}
+.modal_btns{
+    display: flex;
+    justify-content: space-around;
+}
