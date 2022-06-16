@@ -5,6 +5,11 @@ import TextField from "@mui/material/TextField";
 import { AppDataContext } from "../../context/appDataContext";
 import { addPackage } from "../../Functions";
 import ModalBtn from "../modalBtn";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+
 import { modalValidation, checkNotEmpty } from "./modalValidation";
 import {
   intialErrors,
@@ -38,6 +43,7 @@ function ModalComponent({ modalStatus, setModalStatus }) {
       setAppData(newData);
       setModalStatus();
       setNewPackageInfo(newPackageInfoIntialValue);
+      setDisabled(true)
     }
   };
   const validateInputs = () => {
@@ -53,7 +59,7 @@ function ModalComponent({ modalStatus, setModalStatus }) {
   useEffect(() => {
     const valid = validateInputs();
     if (valid) setDisabled(false);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newPackageInfo]);
   return (
     <div>
@@ -100,21 +106,28 @@ function ModalComponent({ modalStatus, setModalStatus }) {
               }
               value={newPackageInfo.price}
             />
-            <TextField
-              placeholder="Customer ID"
-              name="customerid"
-              label="Customer ID"
-              required
-              error={errors.customerid ? true : false}
-              helperText={errors.customerid}
-              onChange={(event) =>
-                handleChange({
-                  ...newPackageInfo,
-                  customerid: event.target.value,
-                })
-              }
-              value={newPackageInfo.customerid}
-            />
+            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+              <InputLabel id="demo-select-small">Customer ID</InputLabel>
+              <Select
+                labelId="demo-select-small"
+                id="demo-select-small"
+                value={newPackageInfo.customerid}
+                label="Customer ID"
+                onChange={(event) =>
+                  handleChange({
+                    ...newPackageInfo,
+                    customerid: event.target.value,
+                  })
+                }
+                style={{margin:'-8px',padding:"5px"}}
+              >
+                {appData.customers.map((customer) => {
+              return (
+                <MenuItem key={customer.id} value={customer.id}>{customer.id}</MenuItem>
+              );
+            })}
+              </Select>
+            </FormControl>
             <TextField
               placeholder="Shipping Order"
               name="shippingOrder"
@@ -131,7 +144,11 @@ function ModalComponent({ modalStatus, setModalStatus }) {
               value={newPackageInfo.shippingOrder}
             />
             <div className="modal_btns">
-              <ModalBtn onClickFunc={setModalStatus} text="cancel" color="error" />
+              <ModalBtn
+                onClickFunc={setModalStatus}
+                text="cancel"
+                color="error"
+              />
 
               <ModalBtn
                 onClickFunc={addNewPackage}
